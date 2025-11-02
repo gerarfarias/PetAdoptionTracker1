@@ -65,3 +65,12 @@ I also updated the ApplicationDbContext class and added a DbSet<Pet> so Entity F
 Testing included verifying that the migration built correctly and that the Pets table appeared in SQL Server Object Explorer. This confirms the app is now connected to persistent storage.
 
 These tasks were essential because every future feature — CRUD operations, logging, diagnostics, stored procedures — depends on having a working data model. With Week 10 complete, the project is now ready for controller logic and full database interaction in Week 12.
+
+## WEEK 11 UPDATE
+
+
+This week, I focused on improving the architecture of my Pet Adoption Tracker project by applying the principles of Separation of Concerns and Dependency Injection (DI). The goal was to move all non-UI logic out of the controller and into a dedicated service class that handles the data operations for the Pet entity.
+
+I created a PetService class with methods for retrieving, adding, updating, and deleting pets. Then I defined an interface IPetService to make the service easier to test and extend in the future. The service interacts directly with the ApplicationDbContext, while the controller now just delegates tasks to it. I registered the service in the DI container using a scoped lifetime so that a new instance is created per HTTP request, which is the recommended approach for Entity Framework Core.
+
+Implementing DI made my code cleaner and easier to maintain. The PetsController is now much thinner and focuses only on handling user requests and responses, while the logic stays encapsulated in the service layer. This structure is similar to real-world enterprise applications, where services provide reusable, testable components that can be swapped or extended without breaking other parts of the system.

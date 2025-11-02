@@ -1,5 +1,6 @@
 using Microsoft.EntityFrameworkCore;
 using PetAdoptionTracker.Data;
+using PetAdoptionTracker.Services;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -9,6 +10,10 @@ builder.Services.AddDbContext<ApplicationDbContext>(options =>
 
 // Add MVC Support
 builder.Services.AddControllersWithViews();
+
+// Register PetService for Dependency Injection
+builder.Services.AddScoped<IPetService, PetService>();
+
 
 var app = builder.Build();
 
