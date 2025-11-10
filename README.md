@@ -74,3 +74,21 @@ This week, I focused on improving the architecture of my Pet Adoption Tracker pr
 I created a PetService class with methods for retrieving, adding, updating, and deleting pets. Then I defined an interface IPetService to make the service easier to test and extend in the future. The service interacts directly with the ApplicationDbContext, while the controller now just delegates tasks to it. I registered the service in the DI container using a scoped lifetime so that a new instance is created per HTTP request, which is the recommended approach for Entity Framework Core.
 
 Implementing DI made my code cleaner and easier to maintain. The PetsController is now much thinner and focuses only on handling user requests and responses, while the logic stays encapsulated in the service layer. This structure is similar to real-world enterprise applications, where services provide reusable, testable components that can be swapped or extended without breaking other parts of the system.
+
+## WEEK 12 UPDATE
+
+For Week 12, I implemented a full CRUD vertical slice for the Pet Adoption Tracker application. The goal for this week was to ensure that the core Create, Read, Update, and Delete operations work from the UI down to the database using asynchronous EF Core methods. This allows users to register pets, edit details, view pet profiles, and remove entries when needed.
+
+All data access methods were implemented using asynchronous calls such as ToListAsync(), FindAsync(), and SaveChangesAsync() to ensure better performance and non-blocking database operations. The CRUD interface includes:
+
+A working Index page that lists all pets from the database.
+
+A Details page for individual pet profiles.
+
+Create and Edit forms that support model validation feedback.
+
+A Delete confirmation workflow for safe record removal.
+
+To improve data integrity, I implemented validation directly in the model using Data Annotations such as [Required], [StringLength], and [Range]. When invalid data is entered, the UI displays real-time error messages using asp-validation-summary, giving users clear feedback instead of failing silently.
+
+This week helped me understand how crucial it is to build one fully working vertical feature before scaling more complexity. CRUD acts as the backbone of most real-world applications, and having it fully operational prepares the app for future layers such as business logic, authentication, filtering, and stored procedures.
