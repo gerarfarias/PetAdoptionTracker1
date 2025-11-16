@@ -1,32 +1,32 @@
 using Microsoft.EntityFrameworkCore;
 using PetAdoptionTracker.Data;
-using PetAdoptionTracker.Services;
 
 var builder = WebApplication.CreateBuilder(args);
 
-// Add DbContext BEFORE builder.Build()
+// -----------------------
+// Database + Health Checks
+// -----------------------
 builder.Services.AddDbContext<ApplicationDbContext>(options =>
     options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
 
-// Add MVC Support
+builder.Services.AddHealthChecks()
+    .AddDbContextCheck<ApplicationDbContext>("Database");
+
+// MVC
 builder.Services.AddControllersWithViews();
-
-// Register PetService for Dependency Injection
-builder.Services.AddScoped<IPetService, PetService>();
-
 
 var app = builder.Build();
 
-// Configure the HTTP request pipeline.
+// -----------------------
+// Health Endpoint Mapping
+// -----------------------
+app.MapHealthChecks("/healthz");
+
 if (!app.Environment.IsDevelopment())
 {
     app.UseExceptionHandler("/Home/Error");
-    app.UseHsts();
 }
 
-app.UseHttpsRedirection();
-
-// Required for Bootstrap, CSS, images, etc.
 app.UseStaticFiles();
 
 app.UseRouting();

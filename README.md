@@ -92,3 +92,13 @@ A Delete confirmation workflow for safe record removal.
 To improve data integrity, I implemented validation directly in the model using Data Annotations such as [Required], [StringLength], and [Range]. When invalid data is entered, the UI displays real-time error messages using asp-validation-summary, giving users clear feedback instead of failing silently.
 
 This week helped me understand how crucial it is to build one fully working vertical feature before scaling more complexity. CRUD acts as the backbone of most real-world applications, and having it fully operational prepares the app for future layers such as business logic, authentication, filtering, and stored procedures.
+
+## WEEK 13 UPDATE
+
+This week I implemented a diagnostics feature by adding a dedicated /healthz endpoint to the application. The purpose of this endpoint is to give a clear and reliable indicator of whether the application and its dependencies are functioning correctly. This mirrors what real-world production systems use for monitoring, uptime checks, and container orchestration systems like Kubernetes.
+
+To implement the feature, I used ASP.NET Core Health Checks. In the Program.cs file, I added builder.Services.AddHealthChecks() and included a database dependency check using AddDbContextCheck<ApplicationDbContext>(). This ensures the health endpoint doesn’t just say “I am running,” but also verifies that the application can successfully connect to the database. If the database is unavailable, the health status will return “Unhealthy,” which makes troubleshooting much easier.
+
+I mapped the "/healthz" endpoint using app.MapHealthChecks(). To improve usability, I also implemented a custom JSON ResponseWriter so the results include dependency names, statuses, and descriptions without revealing any secrets such as connection strings or credentials.
+
+With this setup, the /healthz endpoint now returns a meaningful response that can be used by automated monitoring tools or by developers during debugging. This feature is valuable in real-world scenarios where applications must be reliable, scalable, and observable.
